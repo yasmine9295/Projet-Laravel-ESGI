@@ -14,24 +14,40 @@
                     </h3>
                     <p class="text-gray-600 dark:text-gray-400">
                         {{ $film->description }} <b> <br>
-                        durée : {{ $film->duree }} minutes <br>
+                        durée : {{ $film->duree_minutes }} minutes <br>
                         genre : {{ $film->genre->nom }} <br>
                         realisé en {{ $film->annee_production }} </b>
-                    a laffiche du {{ $film->date_debut_affiche }} au {{ $film->date_fin_affiche }} </b>
-                    {{ $film->resum }} 
+                        a laffiche du {{ $film->date_debut_affiche }} au {{ $film->date_fin_affiche }}
+                    </p>
+                    {{ $film->resum }}
 
-                    <br>
-                    <br>
+                    <br><br>
+                    <a href="{{ route('reservations.create', $film->id_film) }}">
+                        Réserver ce film
+                    </a>
+
+                    <br><br>
                     Liste des films du meme genre : <br>
                     <ul>
-                         @foreach ($film-> genre->films as $film) 
-                          <li> <a href="{{ route('film', $film) }}"> {{ $film->titre }} </a></li>
+                        @foreach ($film->genre->films as $autreFilm)
+                            <li><a href="{{ route('film', $autreFilm) }}">{{ $autreFilm->titre }}</a></li>
                         @endforeach
-                    </p>
+                    </ul>
+
+                    @if(auth()->user()->role === 'admin')
+                        <br>
+                        <a href="{{ route('films.edit', $film->id_film) }}">
+                            Modifier ce film
+                        </a>
+
+                        <form method="POST" action="{{ route('films.delete', $film->id_film) }}">
+                            @csrf
+                            <button type="submit">Supprimer ce film</button>
+                        </form>
+                    @endif
+
                 </div>
             </div>
         </div>
     </div>
 </x-app-layout>
-
-
