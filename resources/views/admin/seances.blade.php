@@ -15,6 +15,13 @@
 
                     <a href="{{ route('admin.seances.create') }}">Ajouter une séance</a>
 
+                    <form method="GET" action="{{ route('admin.seances') }}">
+                        <label>Filtrer par date</label>
+                        <input type="date" name="date_seance" value="{{ request('date_seance') }}" class="text-black">
+                        <button type="submit">Filtrer</button>
+                        <a href="{{ route('admin.seances') }}">Supprimer le filtre</a>
+                    </form>
+
                     <table>
                         <thead>
                             <tr>

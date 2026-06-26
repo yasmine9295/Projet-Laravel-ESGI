@@ -10,12 +10,16 @@ use Illuminate\Support\Facades\DB;
 
 class SeanceController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         if (Auth::user()->role !== 'admin')
             abort(403);
 
-        $seances = Seance::with('film')->get();
+        $seances = Seance::with('film');
+        if ($request->date_seance)
+            $seances = $seances->whereDate('debut_seance', $request->date_seance);
+
+        $seances = $seances->get();
         $salles = DB::table('salles')->pluck('nom_salle', 'id_salle');
         return view('admin.seances', ['seances' => $seances, 'salles' => $salles]);
     }
