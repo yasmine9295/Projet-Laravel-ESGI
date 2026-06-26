@@ -41,8 +41,11 @@ Route::middleware('auth')->group(function () {
 
 
     Route::get('/admin/seances', [SeanceController::class, 'index'])->name('admin.seances');
+    Route::get('/admin/seances/create', [SeanceController::class, 'create'])->name('admin.seances.create');
+    Route::post('/admin/seances/create', [SeanceController::class, 'store'])->name('admin.seances.store');
     Route::get('/admin/seances/{id}/edit', [SeanceController::class, 'edit'])->name('admin.seances.edit');
     Route::post('/admin/seances/update', [SeanceController::class, 'update'])->name('admin.seances.update');
+    Route::post('/admin/seances/delete/{id}', [SeanceController::class, 'delete'])->name('admin.seances.delete');
 });
 
 require __DIR__.'/auth.php';
