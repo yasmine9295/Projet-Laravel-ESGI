@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use App\Models\Todo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 class TodosController extends Controller
 {
@@ -18,27 +20,48 @@ class TodosController extends Controller
     public function post(){
 
         $todo = new Todo();
+        $todo->owner = Auth::id();
         $todo->title = request()->title;
         $todo->description = request()->description;
         $todo->save();
 
         return redirect('/todos');
     }
+  
+        public function form_update($id){
+            $todo = Todo::findOrFail($id);
+        return view('todos.update', ['todo' => $todo]);
+    }
+
+    public function do_update(Request $request){
+
+        $todo = Todo::findOrFail($request->id);
+        if($todo->owner != Auth::id())
+            abort(403);
+        $todo->title = $request->title;
+        $todo->description = $request->description;
+        $todo->save();
+
+        return redirect('/todos');
+    }
 
 
-    public function show($monID){
+    public function show($id){
 
-        /*
-        $todo = Todo::where('id', '=', $monID)->first();
-        $todo = Todo::where('id', $monID)->first();
-
-        $todo = Todo::find($monID);
-        if(!$todo){
-            return abort(404);
-        } 
-        */
-
-        $todo = Todo::findOrFail($monID);
+        $todo = Todo::findOrFail($id);
         return view('todos.show', ['todo' => $todo]);
+    }
+
+    
+    public function delete($id){
+        $todo = Todo::findOrFail($id);
+    if (Auth::id() == $todo->owner) {
+        $todo->delete();
+        return redirect('/todos')
+            ->with('status','Todo#'.$id.'deleted !');
+    } else {
+        return redirect('/todos')
+            ->with('status','You are not the owner of this todo !');
+        }
     }
 }
