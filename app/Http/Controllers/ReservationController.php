@@ -29,7 +29,6 @@ class ReservationController extends Controller
             $reservation->id_seance = $request->id_seance;
             $reservation->date_reservation = now();
             $reservation->nombre_places = $request->nombre_places;
-            $reservation->statut = 'en attente';
             $reservation->save();
 
             $seance->places_disponibles -= $request->nombre_places;

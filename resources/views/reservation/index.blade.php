@@ -21,8 +21,7 @@
                                 <li>
                                     {{ $reservation->film->titre }} - 
                                     {{ $reservation->date_reservation }} - 
-                                    {{ $reservation->nombre_places }} places - 
-                                    {{ $reservation->statut }}
+                                    {{ $reservation->nombre_places }} places
                                     <form method="POST" action="{{ route('reservations.destroy', $reservation) }}">
                                         @csrf
                                         @method('DELETE')
