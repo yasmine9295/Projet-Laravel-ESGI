@@ -19,6 +19,8 @@
                                 </option>
                             @endforeach
                         </select>
+                        <label>Filtrer par date de séance</label>
+                        <input type="date" name="date_seance" value="{{ request('date_seance') }}" class="text-black">
                         <button type="submit">Filtrer</button>
                             <a href="{{ route('dashboard') }}">Supprimer le filtre</a>
                     </form>

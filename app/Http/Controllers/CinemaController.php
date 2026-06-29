@@ -5,11 +5,22 @@ namespace App\Http\Controllers;
 use App\Models\Film;
 use App\Models\Genre;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CinemaController extends Controller
 {
     public function index(Request $request){
-        $films = Film::when($request->id_genre, fn($q) => $q->where('id_genre', $request->id_genre))->paginate(15);
+        $films = Film::when($request->id_genre, fn($q) => $q->where('id_genre', $request->id_genre))
+            ->when($request->date_seance, function ($q) use ($request) {
+                $q->whereIn('id_film', function ($query) use ($request) {
+                    $query->select('id_film')
+                        ->from('seances')
+                        ->whereDate('debut_seance', $request->date_seance)
+                        ->where('places_disponibles', '>', 0);
+                });
+            })
+            ->paginate(15)
+            ->withQueryString();
         $genres = Genre::all();
         return view('dashboard', ['films' => $films, 'genres' => $genres]);
     }
