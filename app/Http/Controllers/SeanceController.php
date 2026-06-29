@@ -47,6 +47,13 @@ class SeanceController extends Controller
             'places_disponibles' => 'required|integer|min:1',
         ]);
 
+        $salle = DB::table('salles')->where('id_salle', $request->id_salle)->first();
+        if (! $salle)
+            return redirect()->back()->with('status', 'Salle introuvable.');
+
+        if ($request->places_disponibles > $salle->places)
+            return redirect()->back()->with('status', 'Les places disponibles ne peuvent pas depasser la capacite de la salle.');
+
         $seance = new Seance();
         $seance->id_film = $request->id_film;
         $seance->id_salle = $request->id_salle;
@@ -84,6 +91,13 @@ class SeanceController extends Controller
             'fin_seance' => 'required|date|after:debut_seance',
             'places_disponibles' => 'required|integer|min:1',
         ]);
+
+        $salle = DB::table('salles')->where('id_salle', $request->id_salle)->first();
+        if (! $salle)
+            return redirect()->back()->with('status', 'Salle introuvable.');
+
+        if ($request->places_disponibles > $salle->places)
+            return redirect()->back()->with('status', 'Les places disponibles ne peuvent pas depasser la capacite de la salle.');
 
         $seance = Seance::findOrFail($request->id);
         $seance->id_film = $request->id_film;

@@ -22,6 +22,8 @@ class ReservationController extends Controller
     public function store(Request $request)
         {
             $seance = Seance::findOrFail($request->id_seance);
+            if ($request->nombre_places > $seance->places_disponibles)
+                return redirect()->back()->with('status', 'Le nombre de places demande depasse les places disponibles.');
             
             $reservation = new Reservation();
             $reservation->user_id = Auth::id();
