@@ -15,10 +15,11 @@
                         <ul>
                             @foreach($reservations as $reservation)
                                 <li>
-                                    {{ $reservation->film->titre }} - 
-                                    {{ $reservation->date_reservation }} - 
-                                    {{ $reservation->nombre_places }} places - 
-                                    {{ $reservation->statut }}
+                                    {{ $reservation->film->titre }} ---
+
+                                    {{ $reservation->seance->debut_seance }} ---
+
+                                    {{ $reservation->nombre_places }} places 
                                 </li>
                             @endforeach
                         </ul>
