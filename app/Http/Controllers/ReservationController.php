@@ -29,7 +29,7 @@ class ReservationController extends Controller
             $reservation->user_id = Auth::id();
             $reservation->id_film = $seance->id_film;
             $reservation->id_seance = $request->id_seance;
-            $reservation->date_reservation = now();
+            $reservation->date_reservation = $seance->debut_seance;
             $reservation->nombre_places = $request->nombre_places;
             $reservation->save();
 
