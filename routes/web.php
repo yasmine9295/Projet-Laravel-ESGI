@@ -30,6 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/reservations', [ReservationController::class, 'index'])->name('reservations.index');
     Route::get('/reservations/create/{id}', [ReservationController::class, 'create'])->name('reservations.create');
     Route::post('/reservations', [ReservationController::class, 'store'])->name('reservations.store');
+    Route::delete('/reservations/{reservation}', [ReservationController::class, 'destroy'])->name('reservations.destroy');
 
     Route::get('/films/create', [CinemaController::class, 'create'])->name('films.create');
     Route::post('/films', [CinemaController::class, 'store'])->name('films.store');
@@ -40,8 +41,11 @@ Route::middleware('auth')->group(function () {
 
 
     Route::get('/admin/seances', [SeanceController::class, 'index'])->name('admin.seances');
+    Route::get('/admin/seances/create', [SeanceController::class, 'create'])->name('admin.seances.create');
+    Route::post('/admin/seances/create', [SeanceController::class, 'store'])->name('admin.seances.store');
     Route::get('/admin/seances/{id}/edit', [SeanceController::class, 'edit'])->name('admin.seances.edit');
     Route::post('/admin/seances/update', [SeanceController::class, 'update'])->name('admin.seances.update');
+    Route::post('/admin/seances/delete/{id}', [SeanceController::class, 'delete'])->name('admin.seances.delete');
 });
 
 require __DIR__.'/auth.php';
