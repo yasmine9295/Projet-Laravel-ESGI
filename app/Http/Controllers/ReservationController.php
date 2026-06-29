@@ -22,6 +22,8 @@ class ReservationController extends Controller
     public function store(Request $request)
         {
             $seance = Seance::findOrFail($request->id_seance);
+            if ($request->nombre_places > $seance->places_disponibles)
+                return redirect()->back()->with('status', 'Le nombre de places demande depasse les places disponibles.');
             
             $reservation = new Reservation();
             $reservation->user_id = Auth::id();
@@ -29,7 +31,6 @@ class ReservationController extends Controller
             $reservation->id_seance = $request->id_seance;
             $reservation->date_reservation = now();
             $reservation->nombre_places = $request->nombre_places;
-            $reservation->statut = 'en attente';
             $reservation->save();
 
             $seance->places_disponibles -= $request->nombre_places;
@@ -44,4 +45,22 @@ class ReservationController extends Controller
         $reservations = Reservation::where('user_id', Auth::id())->get();
         return view('reservation.index', ['reservations' => $reservations]);
     }
+    
+    // Annuler une réservation
+    public function destroy(Reservation $reservation)
+        {
+            if ($reservation->user_id !== Auth::id())
+                abort(403);
+
+            $seance = $reservation->seance;
+            if ($seance) {
+                $seance->places_disponibles += $reservation->nombre_places;
+                $seance->save();
+            }
+
+            $reservation->delete();
+
+            return redirect('/reservations')
+                ->with('status', 'Reservation annulee avec succes.');
+        }
 }
