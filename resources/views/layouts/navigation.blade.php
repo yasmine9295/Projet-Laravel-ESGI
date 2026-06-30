@@ -15,6 +15,22 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    <x-nav-link :href="route('reservations.index')" :active="request()->routeIs('reservations.*')">
+                        {{ __('Mes réservations') }}
+                    </x-nav-link>
+
+                    @if(auth()->user()->role === 'admin')
+                        <x-nav-link :href="route('admin.seances')" :active="request()->routeIs('admin.seances*')">
+                            {{ __('Séances') }}
+                        </x-nav-link>
+                    @endif
+
+                    @if(auth()->user()->role === 'admin')
+                        <x-nav-link :href="route('salle.index')" :active="request()->routeIs('salle*')">
+                            {{ __('Salles') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -70,6 +86,16 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+
+            <x-responsive-nav-link :href="route('reservations.index')" :active="request()->routeIs('reservations.*')">
+                {{ __('Mes réservations') }}
+            </x-responsive-nav-link>
+
+            @if(auth()->user()->role === 'admin')
+                <x-responsive-nav-link :href="route('admin.seances')" :active="request()->routeIs('admin.seances*')">
+                    {{ __('Séances') }}
+                </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->

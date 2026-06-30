@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Admin - Séances
+            Séances
         </h2>
     </x-slot>
 
@@ -9,10 +9,17 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
+                    @if(session('status'))
+                        <p>{{ session('status') }}</p>
+                    @endif
+
+                    <a href="{{ route('admin.seances.create') }}">Ajouter une séance</a>
+
                     <table>
                         <thead>
                             <tr>
                                 <th>Film</th>
+                                <th>Salle</th>
                                 <th>Début</th>
                                 <th>Fin</th>
                                 <th>Places disponibles</th>
@@ -23,11 +30,16 @@
                             @foreach($seances as $seance)
                                 <tr>
                                     <td>{{ $seance->film->titre }}</td>
+                                    <td>{{ $salles[$seance->id_salle] ?? $seance->id_salle }}</td>
                                     <td>{{ $seance->debut_seance }}</td>
                                     <td>{{ $seance->fin_seance }}</td>
                                     <td>{{ $seance->places_disponibles }}</td>
                                     <td>
                                         <a href="{{ route('admin.seances.edit', $seance->id) }}">Modifier</a>
+                                        <form method="POST" action="{{ route('admin.seances.delete', $seance->id) }}">
+                                            @csrf
+                                            <button type="submit">Supprimer</button>
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach

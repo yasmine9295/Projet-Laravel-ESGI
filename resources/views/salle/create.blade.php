@@ -15,22 +15,22 @@
 
                         <div class="mb-3">
                             <label>Numéro de salle</label>
-                            <input type="number" name="numero_salle" class="form-control" required>
+                            <input style="color:black" type="number" name="numero_salle" class="form-control" required>
                         </div>
 
                         <div class="mb-3">
                             <label>Nom de la salle</label>
-                            <input type="text" name="nom_salle" class="form-control" required>
+                            <input style="color:black" type="text" name="nom_salle" class="form-control" required>
                         </div>
 
                         <div class="mb-3">
                             <label>Étage</label>
-                            <input type="number" name="etage_salle" class="form-control" required>
+                            <input style="color:black" type="number" name="etage_salle" class="form-control" required>
                         </div>
 
                         <div class="mb-3">
                             <label>Nombre de places</label>
-                            <input type="number" name="places" class="form-control" required>
+                            <input style="color:black" type="number" name="places" class="form-control" required>
                         </div>
 
                         <button type="submit" class="btn btn-primary">Créer</button>

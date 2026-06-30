@@ -18,7 +18,6 @@ return new class extends Migration
         $table->foreign('id_film')->references('id_film')->on('films');
         $table->date('date_reservation');
         $table->integer('nombre_places');
-        $table->string('statut')->default('en attente');
         $table->timestamps();
     });
 }
