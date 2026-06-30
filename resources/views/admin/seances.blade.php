@@ -30,7 +30,7 @@
                             @foreach($seances as $seance)
                                 <tr>
                                     <td>{{ $seance->film->titre }}</td>
-                                    <td>{{ $salles[$seance->id_salle] ?? $seance->id_salle }}</td>
+                                    <td>{{ $seance->salle->nom_salle ?? $seance->id_salle }}</td>
                                     <td>{{ $seance->debut_seance }}</td>
                                     <td>{{ $seance->fin_seance }}</td>
                                     <td>{{ $seance->places_disponibles }}</td>
