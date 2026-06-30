@@ -9,7 +9,11 @@ use Illuminate\Http\Request;
 class CinemaController extends Controller
 {
     public function index(Request $request){
-        $films = Film::when($request->id_genre, fn($q) => $q->where('id_genre', $request->id_genre))->paginate(15);
+        $films = Film::query()
+        ->when($request->id_genre, fn($q) => $q->where('id_genre', $request->id_genre))
+        ->when($request->titre, fn($q)=>
+            $q->where('titre', 'like', "%{$request->titre}%"))
+        ->paginate(15);
         $genres = Genre::all();
         return view('dashboard', ['films' => $films, 'genres' => $genres]);
     }

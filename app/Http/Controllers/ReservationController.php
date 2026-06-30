@@ -7,6 +7,8 @@ use App\Models\Reservation;
 use App\Models\Seance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ReservationMail;
 
 class ReservationController extends Controller
 {
@@ -31,6 +33,8 @@ class ReservationController extends Controller
             $reservation->nombre_places = $request->nombre_places;
             $reservation->statut = 'en attente';
             $reservation->save();
+
+            Mail::to(Auth::user()->email)->send(new ReservationMail($reservation));
 
             $seance->places_disponibles -= $request->nombre_places;
             $seance->save();

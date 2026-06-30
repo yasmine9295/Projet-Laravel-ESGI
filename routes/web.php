@@ -6,6 +6,7 @@ use App\Http\Controllers\TodosController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\SeanceController;
+use App\Http\Controllers\SalleController;
 
 
 Route::get('/', function () {
@@ -42,6 +43,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/seances', [SeanceController::class, 'index'])->name('admin.seances');
     Route::get('/admin/seances/{id}/edit', [SeanceController::class, 'edit'])->name('admin.seances.edit');
     Route::post('/admin/seances/update', [SeanceController::class, 'update'])->name('admin.seances.update');
+
+    
+    Route::get('/salles', [SalleController::class, 'index']);
+    Route::get('/salles/create', [SalleController::class, 'create'])->name('salle.create');
+    Route::post('/salle', [SalleController::class, 'store'])->name('salle.store');
+    Route::put('/salle/update', [SalleController::class, 'update'])->name('salle.update');
+    Route::post('/salle/delete/{id}', [SalleController::class, 'delete'])->name('salle.delete');
+    Route::get('/salle/{id}/edit', [SalleController::class, 'edit'])->name('salle.edit');
+    Route::get('/salle/{id}', [SalleController::class, 'show'])->name('salle');
 });
 
 require __DIR__.'/auth.php';

@@ -11,6 +11,9 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     
                     <form method="GET" action="{{ route('dashboard') }}">
+                        <label >Rechercher par titre</label>
+                        <input style="color: black" type="text" name="titre" value="{{ request('titre') }}">
+                        <button style="background-color: black; padding: 8px; border-radius: 3px; margin: 5px" type="submit">Rechercher</button>
                         <label>Filtrer par genre</label>
                         <select name="id_genre" class="text-black">
                             @foreach($genres as $genre)
