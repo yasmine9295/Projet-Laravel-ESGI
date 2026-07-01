@@ -26,4 +26,9 @@ class Seance extends Model
     {
         return $this->belongsTo(Film::class, 'id_film', 'id_film');
     }
+
+    public function salle(): BelongsTo
+    {
+        return $this->belongsTo(Salle::class, 'id_salle', 'id_salle');
+    }
 }
