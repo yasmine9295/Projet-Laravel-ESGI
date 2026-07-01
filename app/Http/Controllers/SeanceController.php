@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Seance;
 use App\Models\Film;
+use App\Models\Salle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class SeanceController extends Controller
 {
@@ -15,9 +15,8 @@ class SeanceController extends Controller
         if (Auth::user()->role !== 'admin')
             abort(403);
 
-        $seances = Seance::with('film')->get();
-        $salles = DB::table('salles')->pluck('nom_salle', 'id_salle');
-        return view('admin.seances', ['seances' => $seances, 'salles' => $salles]);
+        $seances = Seance::with('film', 'salle')->get();
+        return view('admin.seances', ['seances' => $seances]);
     }
 
     public function create()
@@ -26,7 +25,7 @@ class SeanceController extends Controller
             abort(403);
 
         $films = Film::all();
-        $salles = DB::table('salles')->get();
+        $salles = Salle::all();
         return view('admin.seancescreate', ['films' => $films, 'salles' => $salles]);
     }
 
@@ -42,7 +41,7 @@ class SeanceController extends Controller
             'fin_seance' => 'required|date|after:debut_seance'
         ]);
 
-        $salle = DB::table('salles')->where('id_salle', $request->id_salle)->first();
+        $salle = Salle::find($request->id_salle);
         if (! $salle)
             return redirect()->back()->with('status', 'Salle introuvable.');
 
@@ -70,7 +69,7 @@ class SeanceController extends Controller
 
         $seance = Seance::findOrFail($request->id);
         $films = Film::all();
-        $salles = DB::table('salles')->get();
+        $salles = Salle::all();
         return view('admin.seancesedit', ['seance' => $seance, 'films' => $films, 'salles' => $salles]);
     }
 
@@ -87,7 +86,7 @@ class SeanceController extends Controller
             'places_disponibles' => 'required|integer|min:1',
         ]);
 
-        $salle = DB::table('salles')->where('id_salle', $request->id_salle)->first();
+        $salle = Salle::find($request->id_salle);
         if (! $salle)
             return redirect()->back()->with('status', 'Salle introuvable.');
 

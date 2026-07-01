@@ -15,6 +15,6 @@ class Seance extends Model
     }
     public function salle(): BelongsTo
     {
-        return $this->belongsTo(Salle::class, 'id_salle', 'id');
+        return $this->belongsTo(Salle::class, 'id_salle', 'id_salle');
     }
 }

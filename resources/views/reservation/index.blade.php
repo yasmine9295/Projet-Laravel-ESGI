@@ -23,7 +23,12 @@
 
                                     {{ $reservation->seance->debut_seance }} ---
 
-                                    {{ $reservation->nombre_places }} places 
+                                    {{ $reservation->nombre_places }} places
+                                    <form method="POST" action="{{ route('reservations.destroy', $reservation) }}">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit">Annuler</button>
+                                    </form>
                                 </li>
                             @endforeach
                         </ul>
