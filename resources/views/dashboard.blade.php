@@ -10,10 +10,6 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
 
-                    @if(session('status'))
-                        <p>{{ session('status') }}</p>
-                    @endif
-
                     <form method="GET" action="{{ route('dashboard') }}" class="flex flex-wrap items-end gap-4 mb-4">
                         <div>
                             <label class="block text-sm font-medium mb-1">Filtrer par genre</label>

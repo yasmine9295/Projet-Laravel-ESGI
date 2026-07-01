@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CinemaController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TodosController;
 use Illuminate\Support\Facades\Route;
@@ -18,6 +19,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::post('/notifications/{notificationId}/read', [NotificationController::class, 'read'])->name('notifications.read');
+    Route::post('/notifications/read-all', [NotificationController::class, 'readAll'])->name('notifications.read-all');
 
     Route::get('/todos', [TodosController::class, 'index']);
     Route::get('/todos/create', [TodosController::class, 'create']);

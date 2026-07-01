@@ -11,10 +11,6 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <h3>{{ $film->titre }}</h3>
 
-                    @if(session('status'))
-                        <p>{{ session('status') }}</p>
-                    @endif
-
                     @if($seances->isEmpty())
                         <p>Aucune séance disponible pour ce film.</p>
                     @else

@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ReservationMail;
+use App\Notifications\SystemNotification;
 use App\Models\Film;
 use App\Models\Reservation;
 use App\Models\Seance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class ReservationController extends Controller
 {
@@ -22,8 +25,15 @@ class ReservationController extends Controller
     public function store(Request $request)
         {
             $seance = Seance::findOrFail($request->id_seance);
-            if ($request->nombre_places > $seance->places_disponibles)
-                return redirect()->back()->with('status', 'Le nombre de places demande depasse les places disponibles.');
+            if ($request->nombre_places > $seance->places_disponibles) {
+                Auth::user()->notify(new SystemNotification(
+                    'Reservation refusee',
+                    'Le nombre de places demande depasse les places disponibles.',
+                    'warning'
+                ));
+
+                return redirect()->back();
+            }
             
             $reservation = new Reservation();
             $reservation->user_id = Auth::id();
@@ -32,6 +42,14 @@ class ReservationController extends Controller
             $reservation->date_reservation = $seance->debut_seance;
             $reservation->nombre_places = $request->nombre_places;
             $reservation->save();
+
+            Mail::to(Auth::user()->email)->send(new ReservationMail($reservation));
+
+            Auth::user()->notify(new SystemNotification(
+                'Reservation confirmee',
+                'Votre reservation a bien ete enregistree.',
+                'success'
+            ));
 
             $seance->places_disponibles -= $request->nombre_places;
             $seance->save();
@@ -60,7 +78,12 @@ class ReservationController extends Controller
 
             $reservation->delete();
 
-            return redirect('/reservations')
-                ->with('status', 'Reservation annulee avec succes.');
+            Auth::user()->notify(new SystemNotification(
+                'Reservation annulee',
+                'Votre reservation a ete annulee avec succes.',
+                'success'
+            ));
+
+            return redirect('/reservations');
         }
 }

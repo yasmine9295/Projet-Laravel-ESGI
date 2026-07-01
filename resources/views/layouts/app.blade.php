@@ -27,6 +27,8 @@
                 </header>
             @endisset
 
+            @include('layouts.notifications')
+
             <!-- Page Content -->
             <main>
                 {{ $slot }}

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Notifications\SystemNotification;
 use App\Models\Film;
 use App\Models\Genre;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class CinemaController extends Controller
@@ -45,7 +47,13 @@ class CinemaController extends Controller
         $film->annee_production = $request->annee_production;
         $film->save();
 
-        return redirect()->route('dashboard')->with('status', 'Film ajoute avec succes.');
+        Auth::user()->notify(new SystemNotification(
+            'Film ajoute',
+            'Le film "' . $film->titre . '" a ete ajoute avec succes.',
+            'success'
+        ));
+
+        return redirect()->route('dashboard');
     }
 
     public function edit(Request $request){
@@ -65,14 +73,27 @@ class CinemaController extends Controller
         $film->annee_production = $request->annee_production;
         $film->save();
 
-        return redirect()->route('film', $film->id_film)->with('status', 'Film modifie avec succes.');
+        Auth::user()->notify(new SystemNotification(
+            'Film modifie',
+            'Le film "' . $film->titre . '" a ete modifie avec succes.',
+            'success'
+        ));
+
+        return redirect()->route('film', $film->id_film);
     }
 
     public function delete(Request $request){
         $film = Film::findOrFail($request->id);
+        $titreFilm = $film->titre;
         $film->delete();
 
-        return redirect()->route('dashboard')->with('status', 'Film supprime avec succes.');
+        Auth::user()->notify(new SystemNotification(
+            'Film supprime',
+            'Le film "' . $titreFilm . '" a ete supprime avec succes.',
+            'success'
+        ));
+
+        return redirect()->route('dashboard');
     }
 
     

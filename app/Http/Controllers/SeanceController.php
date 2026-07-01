@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Notifications\SystemNotification;
 use App\Models\Seance;
 use App\Models\Film;
 use App\Models\Salle;
@@ -43,11 +44,25 @@ class SeanceController extends Controller
         ]);
 
         $salle = Salle::find($request->id_salle);
-        if (! $salle)
-            return redirect()->back()->with('status', 'Salle introuvable.');
+        if (! $salle) {
+            Auth::user()->notify(new SystemNotification(
+                'Salle introuvable',
+                'La salle selectionnee est introuvable.',
+                'error'
+            ));
 
-        if ($request->places_disponibles > $salle->places)
-            return redirect()->back()->with('status', 'Les places disponibles ne peuvent pas depasser la capacite de la salle.');
+            return redirect()->back();
+        }
+
+        if ($request->places_disponibles > $salle->places) {
+            Auth::user()->notify(new SystemNotification(
+                'Capacite depassee',
+                'Les places disponibles ne peuvent pas depasser la capacite de la salle.',
+                'warning'
+            ));
+
+            return redirect()->back();
+        }
 
         $seance = new Seance();
         $seance->id_film = $request->id_film;
@@ -60,7 +75,13 @@ class SeanceController extends Controller
         $seance->places_disponibles = $request->places_disponibles;
         $seance->save();
 
-        return redirect()->route('admin.seances')->with('status', 'Seance ajoutee avec succes.');
+        Auth::user()->notify(new SystemNotification(
+            'Seance ajoutee',
+            'La seance a ete ajoutee avec succes.',
+            'success'
+        ));
+
+        return redirect()->route('admin.seances');
     }
 
     public function edit(Request $request)
@@ -88,11 +109,25 @@ class SeanceController extends Controller
         ]);
 
         $salle = Salle::find($request->id_salle);
-        if (! $salle)
-            return redirect()->back()->with('status', 'Salle introuvable.');
+        if (! $salle) {
+            Auth::user()->notify(new SystemNotification(
+                'Salle introuvable',
+                'La salle selectionnee est introuvable.',
+                'error'
+            ));
 
-        if ($request->places_disponibles > $salle->places)
-            return redirect()->back()->with('status', 'Les places disponibles ne peuvent pas depasser la capacite de la salle.');
+            return redirect()->back();
+        }
+
+        if ($request->places_disponibles > $salle->places) {
+            Auth::user()->notify(new SystemNotification(
+                'Capacite depassee',
+                'Les places disponibles ne peuvent pas depasser la capacite de la salle.',
+                'warning'
+            ));
+
+            return redirect()->back();
+        }
 
         $seance = Seance::findOrFail($request->id);
         $seance->id_film = $request->id_film;
@@ -102,7 +137,13 @@ class SeanceController extends Controller
         $seance->fin_seance = $request->fin_seance;
         $seance->save();
 
-        return redirect()->route('admin.seances')->with('status', 'Seance modifiee avec succes.');
+        Auth::user()->notify(new SystemNotification(
+            'Seance modifiee',
+            'La seance a ete modifiee avec succes.',
+            'success'
+        ));
+
+        return redirect()->route('admin.seances');
     }
 
     public function delete(Request $request)
@@ -113,6 +154,12 @@ class SeanceController extends Controller
         $seance = Seance::findOrFail($request->id);
         $seance->delete();
 
-        return redirect()->route('admin.seances')->with('status', 'Seance supprimee avec succes.');
+        Auth::user()->notify(new SystemNotification(
+            'Seance supprimee',
+            'La seance a ete supprimee avec succes.',
+            'success'
+        ));
+
+        return redirect()->route('admin.seances');
     }
 }
