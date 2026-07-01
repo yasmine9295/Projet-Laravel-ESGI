@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Film;
 use App\Models\Seance;
+use App\Models\Salle;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

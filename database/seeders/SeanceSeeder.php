@@ -11,8 +11,9 @@ class SeanceSeeder extends Seeder
 {
     public function run(): void
     {
+        Seance::truncate();
         Seance::factory()
-            ->count(10)
+            ->count(5)
             ->create();
     }
 }
